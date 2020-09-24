@@ -26,11 +26,6 @@
     "style",
     "lint"
   ],
-  "files": [
-    "src",
-    "build",
-    "template"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/dolanmiu/docx.git"
