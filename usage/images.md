@@ -5,7 +5,12 @@
 To create a `floating` image on top of text:
 
 ```ts
-Media.addImage(doc, fs.readFileSync("./demo/images/pizza.gif"), 200, 200, {
+const image = new ImageRun({
+    data: fs.readFileSync("./demo/images/pizza.gif"),
+    transformation: {
+        width: 200,
+        height: 200,
+    }
     floating: {
         horizontalPosition: {
             offset: 1014400,
@@ -20,47 +25,52 @@ Media.addImage(doc, fs.readFileSync("./demo/images/pizza.gif"), 200, 200, {
 By default with no arguments, its an `inline` image:
 
 ```ts
-const image = Media.addImage(doc, fs.readFileSync("./demo/images/pizza.gif"));
+const image = new ImageRun({
+    data: fs.readFileSync("./demo/images/pizza.gif"),
+    transformation: {
+        width: 100,
+        height: 100,
+    },
+});
 ```
 
 Add it into the document by adding the image into a paragraph:
 
 ```ts
-doc.addSection({
-    children: [new Paragraph(image)],
-});
-```
-
-Or:
-
-```ts
-doc.addSection({
-    children: [
-        new Paragraph({
-            children: [image],
-        }),
-    ],
+const doc = new Document({
+    sections: [{
+        children: [
+            new Paragraph({
+                children: [image],
+            }),
+        ],
+    }];
 });
 ```
 
 ## Intro
 
-Adding images can be done in two ways:
+Adding images can be easily done by creating an instance of `ImageRun`. This can be added in a `Paragraph` or `Hyperlink`:
 
-1. Call the `createImage` method to add the image directly into the `document`:
-
-    ```ts
-    Media.addImage(doc, [IMAGE_BUFFER], [WIDTH], [HEIGHT], [POSITION_OPTIONS]);
-    ```
-
-2. Create an `image` first, then add it into the `document`:
-
-    ```ts
-    const image = Media.addImage(doc, [IMAGE_BUFFER]);
-    doc.addSection({
-        children: [new Paragraph(image)],
-    });
-    ```
+```ts
+const doc = new Document({
+    sections: [{
+        children: [
+            new Paragraph({
+                children: [
+                    new ImageRun({
+                        data: [IMAGE_BUFFER],
+                        transformation: {
+                            width: [IMAGE_SIZE],
+                            height: [IMAGE_SIZE],
+                        },
+                    }),
+                ],
+            }),
+        ],
+    }];
+});
+```
 
 `docx` supports `jpeg`, `jpg`, `bmp`, `gif` and `png`
 
@@ -68,25 +78,30 @@ Adding images can be done in two ways:
 
 > Positioning is the method on how to place the image on the document
 
-![Word Image Positiong](https://user-images.githubusercontent.com/34742290/41765548-b0946302-7604-11e8-96f9-166a9f0b8f39.png)
+![Word Image Positioning](https://user-images.githubusercontent.com/34742290/41765548-b0946302-7604-11e8-96f9-166a9f0b8f39.png)
 
 Three types of image positioning is supported:
 
 -   Floating
 -   Inline
 
-By default, picture are exported as `Inline` elements.
+By default, images are exported as `Inline` elements.
 
 ### Usage
 
-Pass `options` into the `[POSITION_OPTIONS]` metioned in the [Intro above](#Intro).
+Pass `options` into the `[POSITION_OPTIONS]` mentioned in the [Intro above](#Intro).
 
 ## Floating
 
 To change the position the image to be on top of the text, simply add the `floating` property to the last argument. By default, the offsets are relative to the top left corner of the `page`. Offset units are in [emus](https://startbigthinksmall.wordpress.com/2010/01/04/points-inches-and-emus-measuring-units-in-office-open-xml/):
 
 ```ts
-const imageData = document.createImage(buffer, 903, 1149, {
+const image = new ImageRun({
+    data: buffer,
+    transformation: {
+        width: 903,
+        height: 1149,
+    },
     floating: {
         horizontalPosition: {
             offset: 1014400, // relative: HorizontalPositionRelativeFrom.PAGE by default
@@ -99,7 +114,12 @@ const imageData = document.createImage(buffer, 903, 1149, {
 ```
 
 ```ts
-const imageData = document.createImage(buffer, 903, 1149, {
+const image = new ImageRun({
+    data: buffer,
+    transformation: {
+        width: 903,
+        height: 1149,
+    },
     floating: {
         horizontalPosition: {
             relative: HorizontalPositionRelativeFrom.RIGHT_MARGIN,
@@ -125,6 +145,7 @@ Full options you can pass into `floating` are:
 | lockAnchor         | `boolean`                   | Optional |
 | behindDocument     | `boolean`                   | Optional |
 | layoutInCell       | `boolean`                   | Optional |
+| zIndex             | `number`                    | Optional |
 
 `HorizontalPositionOptions` are:
 
@@ -158,7 +179,12 @@ wrap: {
 For example:
 
 ```ts
-Media.addImage(doc, fs.readFileSync("./demo/images/pizza.gif"), 200, 200, {
+const image = new ImageRun({
+    data: fs.readFileSync("./demo/images/pizza.gif"),
+    transformation: {
+        width: 200,
+        height: 200,
+    },
     floating: {
         horizontalPosition: {
             offset: 2014400,
@@ -201,7 +227,12 @@ margins: {
 For example:
 
 ```ts
-Media.addImage(doc, fs.readFileSync("./demo/images/pizza.gif"), 200, 200, {
+const image = new ImageRun({
+    data: fs.readFileSync("./demo/images/pizza.gif"),
+    transformation: {
+        width: 200,
+        height: 200,
+    },
     floating: {
         horizontalPosition: {
             offset: 2014400,

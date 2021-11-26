@@ -1,8 +1,8 @@
 # Paragraph
 
-> Everything (text, images, graphs etc) in OpenXML is organised in paragraphs.
+> Everything (text, images, graphs etc) in OpenXML is organized in paragraphs.
 
-!> Paragraphs requires an understanding of [Sections](sections.md).
+!> Paragraphs requires an understanding of [Sections](usage/sections.md).
 
 You can create `Paragraphs` in the following ways:
 
@@ -16,7 +16,7 @@ const paragraph = new Paragraph("Short hand Hello World");
 
 ### Children Method
 
-This method is useful for adding different [text](text.md) with different styles, [symbols](symbols.md), or adding [images](images.md) inline.
+This method is useful for adding different [text](usage/text.md) with different styles, [symbols](usage/symbols.md), or adding [images](usage/images.md) inline.
 
 ```ts
 const paragraph = new Paragraph({
@@ -32,23 +32,27 @@ const paragraph = new Paragraph({
 });
 ```
 
-After you create the paragraph, you must add the paragraph into the `document's section`. Learn more about `sections` here:
+After you create the paragraph, you must add the paragraph into a `section`:
 
 ```ts
-doc.addSection({
-    children: [paragraph],
+const doc = new Document({
+    sections: [{
+        children: [paragraph],
+    }];
 });
 ```
 
-Or the preferred convension, define the paragraph inside the section and remove the usage of variables:
+Or the preferred convention, define the paragraph inside the section and remove the usage of variables:
 
 ```ts
-doc.addSection({
-    children: [
-        new Paragraph({
-            children: [new TextRun("Lorem Ipsum Foo Bar"), new TextRun("Hello World")],
-        }),
-    ],
+const doc = new Document({
+    sections: [{
+        children: [
+            new Paragraph({
+                children: [new TextRun("Lorem Ipsum Foo Bar"), new TextRun("Hello World")],
+            }),
+        ],
+    }];
 });
 ```
 
@@ -72,11 +76,13 @@ This is the list of options for a paragraph. A detailed explanation is below:
 | indent                         | `IIndentAttributesProperties`                                                                                       | Optional   |                                                                                                            |
 | keepLines                      | `boolean`                                                                                                           | Optional   |                                                                                                            |
 | keepNext                       | `boolean`                                                                                                           | Optional   |                                                                                                            |
-| children                       | `(TextRun or PictureRun or Hyperlink)[]`                                                                            | Optional   |                                                                                                            |
+| children                       | `(TextRun or ImageRun or Hyperlink)[]`                                                                            | Optional   |                                                                                                            |
 | style                          | `string`                                                                                                            | Optional   |                                                                                                            |
-| tabStop                        | `{ left?: ITabStopOptions; right?: ITabStopOptions; maxRight?: { leader: LeaderType; }; center?: ITabStopOptions }` | Optional   |                                                                                                            |
-| bullet                         | `{ level: number }`                                                                                                 | Optional   |                                                                                                            |
-| numbering                      | `{ num: ConcreteNumbering; level: number; custom?: boolean }`                                                       | Optional   |                                                                                                            |
+| [tabStop](usage/tab-stops)     | `{ left?: ITabStopOptions; right?: ITabStopOptions; maxRight?: { leader: LeaderType; }; center?: ITabStopOptions }` | Optional   |                                                                                                            |
+| [bullet](usage/bullet-points)  | `{ level: number }`                                                                                                 | Optional   |                                                                                                            |
+| [numbering](usage/numbering)   | `{ num: ConcreteNumbering; level: number; custom?: boolean }`                                                       | Optional   |                                                                                                            |
+| [widowControl](#widow-control) | `boolean`                                                                                                           | Optional   |                                                                                                            |
+| [frame](usage/text-frames.md)  | `IFrameOptions`                                                                                                     | Optional   |                                                                                                            |
 
 ## Text
 
@@ -142,18 +148,44 @@ const paragraph = new Paragraph({
 });
 ```
 
+## Shading
+
+Add color to an entire paragraph block
+
+```ts
+const paragraph = new Paragraph({
+    text: "shading",
+    shading: {
+        type: ShadingType.REVERSE_DIAGONAL_STRIPE,
+        color: "00FFFF",
+        fill: "FF0000",
+    },
+});
+```
+
+## Widow Control
+
+Allow First/Last Line to Display on a Separate Page
+
+```ts
+const paragraph = new Paragraph({
+    text: "shading",
+    widowControl: true,
+});
+```
+
 ## Spacing
 
 Adding spacing between paragraphs
 
 ### ISpacingProperties
 
-| Property | Type     | Notes    |
-| -------- | -------- | -------- |
-| after    | `number` | Optional |
-| before   | `number` | Optional |
-| line     | `number` | Optional |
-| lineRule | `string` | Optional |
+| Property | Type           | Notes    | Possible Values               |
+| -------- | -------------- | -------- | ----------------------------- |
+| after    | `number`       | Optional |                               |
+| before   | `number`       | Optional |                               |
+| line     | `number`       | Optional |                               |
+| lineRule | `LineRuleType` | Optional | `AT_LEAST`, `EXACTLY`, `AUTO` |
 
 **Example:**
 
@@ -180,7 +212,7 @@ const paragraph = new Paragraph({
 
 ## Styles
 
-To create styles, please refer to the styling Wiki: https://github.com/dolanmiu/docx/wiki/Styling
+To create styles, please refer to the [styling documentation](usage/styling-with-js)
 
 ![Word 2013 Styles menu](http://content.gcflearnfree.org/topics/233/style_apply_choose.png "Word 2013 Styles menu")
 
